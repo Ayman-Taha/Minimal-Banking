@@ -36,6 +36,7 @@ const account4 = {
 const accounts = [account1, account2, account3, account4];
 
 let currentAccount;
+let sorted = false;
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -94,7 +95,14 @@ function updateUI(acc) {
 
   //movements
   containerMovements.innerHTML = '';
-  acc.movements.forEach(function (mov, i) {
+
+  let sortedAccMovements = acc.movements.slice().sort(function (a, b) {
+    return a - b;
+  });
+
+  let movements = sorted ? sortedAccMovements : acc.movements;
+
+  movements.forEach(function (mov, i) {
     let type = mov > 0 ? 'deposit' : 'withdrawal';
     let str = `
     <div class="movements__row">
@@ -179,6 +187,14 @@ btnLoan.addEventListener('click', function (e) {
     currentAccount.movements.push(loanAmt);
     updateUI(currentAccount);
   }
+});
+
+//sorting
+
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  sorted = !sorted;
+  updateUI(currentAccount);
 });
 
 /////////////////////////////////////////////////
