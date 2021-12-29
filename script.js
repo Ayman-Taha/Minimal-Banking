@@ -167,7 +167,15 @@ btnTransfer.addEventListener('click', function (e) {
   let receivingAcc = accounts.find(function (acc) {
     return acc.username === inputTransferTo.value;
   });
-  if (receivingAcc) {
+  inputTransferAmount.value = '';
+  inputTransferTo.value = '';
+  if (
+    receivingAcc &&
+    transferredAmt > 0 &&
+    currentAccount.movements.reduce(function (balance, mov) {
+      return balance + mov;
+    }, 0) > transferredAmt
+  ) {
     receivingAcc.movements.push(transferredAmt);
     currentAccount.movements.push(-transferredAmt);
     updateUI(currentAccount);
@@ -179,7 +187,9 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
   let loanAmt = Number(inputLoanAmount.value);
+  inputLoanAmount.value = '';
   if (
+    loanAmt > 0 &&
     currentAccount.movements.some(function (mov) {
       return mov >= 0.1 * loanAmt;
     })
