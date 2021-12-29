@@ -35,6 +35,8 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
+let currentAccount;
+
 // Elements
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
@@ -79,6 +81,7 @@ btnLogin.addEventListener('click', function (e) {
     return acc.username === username;
   });
   if (password === acc?.pin) {
+    currentAccount = acc;
     updateUI(acc);
     containerApp.style.opacity = 1;
   }
@@ -147,5 +150,35 @@ function updateUI(acc) {
         return sum + interestAdded;
       }, 0) + '€';
 }
+
+//transfers
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  let transferredAmt = Number(inputTransferAmount.value);
+  let receivingAcc = accounts.find(function (acc) {
+    return acc.username === inputTransferTo.value;
+  });
+  if (receivingAcc) {
+    receivingAcc.movements.push(transferredAmt);
+    currentAccount.movements.push(-transferredAmt);
+    updateUI(currentAccount);
+  }
+});
+
+//loans (a loan only goes through if there was at least one deposit that is more than 10% of the loan amount)
+
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  let loanAmt = Number(inputLoanAmount.value);
+  if (
+    currentAccount.movements.some(function (mov) {
+      return mov >= 0.1 * loanAmt;
+    })
+  ) {
+    currentAccount.movements.push(loanAmt);
+    updateUI(currentAccount);
+  }
+});
 
 /////////////////////////////////////////////////
