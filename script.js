@@ -16,9 +16,9 @@ const account1 = {
     '2020-01-28T09:15:04.904Z',
     '2020-04-01T10:17:24.185Z',
     '2021-05-08T14:11:59.604Z',
-    '2021-05-27T17:01:17.194Z',
-    '2021-07-11T23:36:17.929Z',
-    '2021-07-12T10:51:36.790Z',
+    new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
+    new Date().toISOString(),
   ],
   currency: 'EUR',
   locale: 'pt-PT',
@@ -35,9 +35,9 @@ const account2 = {
     '2019-12-25T06:04:23.907Z',
     '2020-01-25T14:18:46.235Z',
     '2020-02-05T16:33:06.386Z',
-    '2021-04-10T14:43:26.374Z',
-    '2021-06-25T18:49:59.371Z',
-    '2021-07-26T12:01:20.894Z',
+    new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
+    new Date().toISOString(),
   ],
   currency: 'USD',
   locale: 'en-US',
@@ -54,12 +54,11 @@ const account3 = {
     '2019-12-25T06:04:23.907Z',
     '2020-01-25T14:18:46.235Z',
     '2020-02-05T16:33:06.386Z',
-    '2020-04-10T14:43:26.374Z',
-    '2021-06-25T18:49:59.371Z',
-    '2021-07-26T12:01:20.894Z',
+    new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
+    new Date().toISOString(),
   ],
   currency: 'GBP',
-  locale: 'en-US',
 };
 
 const account4 = {
@@ -69,13 +68,11 @@ const account4 = {
   pin: '4444',
   movementsDates: [
     '2019-11-01T13:15:33.035Z',
-    '2019-11-30T09:48:16.867Z',
-    '2019-12-25T06:04:23.907Z',
-    '2020-01-25T14:18:46.235Z',
-    '2021-02-05T16:33:06.386Z',
+    '2020-11-30T09:48:16.867Z',
+    new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
+    new Date().toISOString(),
   ],
-  currency: 'USD',
-  locale: 'en-US',
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -114,6 +111,26 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 let currentAccount;
 let sorted = false;
+
+let curDate = new Date();
+
+const curDateOptions = {
+  hour: '2-digit',
+  minute: '2-digit',
+  day: 'numeric',
+  month: 'numeric',
+  year: 'numeric',
+  weekday: 'long',
+};
+
+const movDateOptions = {
+  hour: '2-digit',
+  minute: '2-digit',
+  day: 'numeric',
+  month: 'numeric',
+  year: 'numeric',
+};
+
 // creating usernames
 accounts.forEach(function (acc) {
   acc.username = acc.owner
@@ -127,6 +144,14 @@ function displayWelcome(acc) {
   labelWelcome.textContent = `Welcome back, ${acc.owner.split(' ')[0]}`;
 }
 
+function displayCurrentDate(acc) {
+  let loc = acc.locale || Navigator.language;
+  let currentDate = new Intl.DateTimeFormat(loc, curDateOptions).format(
+    curDate
+  );
+  labelDate.textContent = currentDate;
+}
+
 function displayMovements(acc) {
   containerMovements.innerHTML = '';
 
@@ -138,13 +163,45 @@ function displayMovements(acc) {
 
   movements.forEach(function (mov, i) {
     let type = mov > 0 ? 'deposit' : 'withdrawal';
+
+    let loc = acc.locale || Navigator.language;
+
+    let movDate;
+
+    let timePassed = Math.floor(
+      (new Date() - new Date(acc.movementsDates[i])) / (1000 * 60 * 60 * 24)
+    );
+
+    if (timePassed === 0) {
+      movDate = 'Today';
+    } else if (timePassed === 1) {
+      movDate = 'Yesterday';
+    } else if (timePassed < 7) {
+      movDate = `${timePassed} days ago`;
+    } else if (timePassed === 7) {
+      movDate = 'A week ago';
+    } else {
+      movDate = new Intl.DateTimeFormat(loc, movDateOptions).format(
+        new Date(acc.movementsDates[i])
+      );
+    }
+
+    const currencyOptions = {
+      style: 'currency',
+      currency: acc.currency || 'USD',
+    };
+
+    const formattedMov = new Intl.NumberFormat(loc, currencyOptions).format(
+      mov
+    );
+
     let str = `
     <div class="movements__row">
       <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-      <div class="movements__date">3 days ago</div>
-      <div class="movements__value">${mov}€</div>
+      <div class="movements__date">${movDate}</div>
+      <div class="movements__value">${formattedMov}</div>
     </div>
     `;
 
@@ -153,24 +210,40 @@ function displayMovements(acc) {
 }
 
 function displayBalance(acc) {
-  labelBalance.textContent =
-    acc.movements.reduce((balance, mov) => balance + mov, 0) + '€';
+  let loc = acc.locale || Navigator.language;
+  const currencyOptions = {
+    style: 'currency',
+    currency: acc.currency || 'USD',
+  };
+  let accBalance = acc.movements.reduce((balance, mov) => balance + mov, 0);
+  labelBalance.textContent = new Intl.NumberFormat(loc, currencyOptions).format(
+    accBalance
+  );
 }
 
 function displaySummary(acc) {
+  let loc = acc.locale || Navigator.language;
+  const currencyOptions = {
+    style: 'currency',
+    currency: acc.currency || 'USD',
+  };
   //In
   let sumIn = acc.movements
     .filter(mov => mov > 0)
     .reduce((sum, deposit) => sum + deposit, 0);
 
-  labelSumIn.textContent = sumIn + '€';
+  labelSumIn.textContent = new Intl.NumberFormat(loc, currencyOptions).format(
+    sumIn
+  );
 
   //Out
   let sumOut = acc.movements
     .filter(mov => mov < 0)
     .reduce((sum, withdrawal) => sum + Math.abs(withdrawal), 0);
 
-  labelSumOut.textContent = sumOut + '€';
+  labelSumOut.textContent = new Intl.NumberFormat(loc, currencyOptions).format(
+    sumOut
+  );
 
   //Interest (it is only added if it is more than or equal to 1)
   let sumInterest = acc.movements
@@ -182,11 +255,15 @@ function displaySummary(acc) {
           : 0;
       return sum + interestAdded;
     }, 0);
-  labelSumInterest.textContent = sumInterest + '€';
+  labelSumInterest.textContent = new Intl.NumberFormat(
+    loc,
+    currencyOptions
+  ).format(sumInterest);
 }
 
 //update UI
 function updateUI(acc) {
+  displayCurrentDate(acc);
   displayWelcome(acc);
   displayMovements(acc);
   displayBalance(acc);
@@ -225,6 +302,10 @@ btnTransfer.addEventListener('click', function (e) {
   ) {
     receivingAcc.movements.push(transferredAmt);
     currentAccount.movements.push(-transferredAmt);
+
+    receivingAcc.movementsDates.push(new Date().toISOString());
+    currentAccount.movementsDates.push(new Date().toISOString());
+
     updateUI(currentAccount);
   }
 });
@@ -238,7 +319,8 @@ btnLoan.addEventListener('click', function (e) {
     loanAmt > 0 &&
     currentAccount.movements.some(mov => mov >= 0.1 * loanAmt)
   ) {
-    currentAccount.movements.push(loanAmt);
+    currentAccount.movements.push(Math.round(loanAmt));
+    currentAccount.movementsDates.push(new Date().toISOString());
     updateUI(currentAccount);
   }
 });
