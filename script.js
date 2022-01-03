@@ -139,16 +139,26 @@ accounts.forEach(function (acc) {
 });
 
 //Functions
+function dateFormatting(date, acc, options) {
+  let loc = acc.locale || Navigator.language;
+  return new Intl.DateTimeFormat(loc, options).format(date);
+}
+
+function currencyFormatting(num, acc) {
+  let loc = acc.locale || Navigator.language;
+  const currencyOptions = {
+    style: 'currency',
+    currency: acc.currency || 'USD',
+  };
+  return new Intl.NumberFormat(loc, currencyOptions).format(num);
+}
 
 function displayWelcome(acc) {
   labelWelcome.textContent = `Welcome back, ${acc.owner.split(' ')[0]}`;
 }
 
 function displayCurrentDate(acc) {
-  let loc = acc.locale || Navigator.language;
-  let currentDate = new Intl.DateTimeFormat(loc, curDateOptions).format(
-    curDate
-  );
+  let currentDate = dateFormatting(curDate, acc, curDateOptions);
   labelDate.textContent = currentDate;
 }
 
@@ -163,8 +173,6 @@ function displayMovements(acc) {
 
   movements.forEach(function (mov, i) {
     let type = mov > 0 ? 'deposit' : 'withdrawal';
-
-    let loc = acc.locale || Navigator.language;
 
     let movDate;
 
@@ -181,20 +189,14 @@ function displayMovements(acc) {
     } else if (timePassed === 7) {
       movDate = 'A week ago';
     } else {
-      movDate = new Intl.DateTimeFormat(loc, movDateOptions).format(
-        new Date(acc.movementsDates[i])
+      movDate = dateFormatting(
+        new Date(acc.movementsDates[i]),
+        acc,
+        movDateOptions
       );
     }
 
-    const currencyOptions = {
-      style: 'currency',
-      currency: acc.currency || 'USD',
-    };
-
-    const formattedMov = new Intl.NumberFormat(loc, currencyOptions).format(
-      mov
-    );
-
+    const formattedMov = currencyFormatting(mov, acc);
     let str = `
     <div class="movements__row">
       <div class="movements__type movements__type--${type}">${
@@ -210,40 +212,24 @@ function displayMovements(acc) {
 }
 
 function displayBalance(acc) {
-  let loc = acc.locale || Navigator.language;
-  const currencyOptions = {
-    style: 'currency',
-    currency: acc.currency || 'USD',
-  };
   let accBalance = acc.movements.reduce((balance, mov) => balance + mov, 0);
-  labelBalance.textContent = new Intl.NumberFormat(loc, currencyOptions).format(
-    accBalance
-  );
+  labelBalance.textContent = currencyFormatting(accBalance, acc);
 }
 
 function displaySummary(acc) {
-  let loc = acc.locale || Navigator.language;
-  const currencyOptions = {
-    style: 'currency',
-    currency: acc.currency || 'USD',
-  };
   //In
   let sumIn = acc.movements
     .filter(mov => mov > 0)
     .reduce((sum, deposit) => sum + deposit, 0);
 
-  labelSumIn.textContent = new Intl.NumberFormat(loc, currencyOptions).format(
-    sumIn
-  );
+  labelSumIn.textContent = currencyFormatting(sumIn, acc);
 
   //Out
   let sumOut = acc.movements
     .filter(mov => mov < 0)
     .reduce((sum, withdrawal) => sum + Math.abs(withdrawal), 0);
 
-  labelSumOut.textContent = new Intl.NumberFormat(loc, currencyOptions).format(
-    sumOut
-  );
+  labelSumOut.textContent = currencyFormatting(sumOut, acc);
 
   //Interest (it is only added if it is more than or equal to 1)
   let sumInterest = acc.movements
@@ -255,10 +241,7 @@ function displaySummary(acc) {
           : 0;
       return sum + interestAdded;
     }, 0);
-  labelSumInterest.textContent = new Intl.NumberFormat(
-    loc,
-    currencyOptions
-  ).format(sumInterest);
+  labelSumInterest.textContent = currencyFormatting(sumInterest, acc);
 }
 
 //update UI
@@ -280,8 +263,12 @@ btnLogin.addEventListener('click', function (e) {
   let acc = accounts.find(acc => acc.username === username);
   if (password === acc?.pin) {
     currentAccount = acc;
+    inputLoginUsername.value = '';
+    inputLoginPin.value = '';
     updateUI(acc);
     containerApp.style.opacity = 1;
+  } else {
+    inputLoginPin.value = '';
   }
 });
 
