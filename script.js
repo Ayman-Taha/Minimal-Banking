@@ -7,72 +7,89 @@
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
-  movements: [200, 450, -400, 3000.35, -650.8, -130, 70.73, 1300],
-  interestRate: 1.2, // %
   pin: '1111',
-  movementsDates: [
-    '2019-11-18T21:31:17.178Z',
-    '2019-12-23T07:42:02.383Z',
-    '2020-01-28T09:15:04.904Z',
-    '2020-04-01T10:17:24.185Z',
-    '2021-05-08T14:11:59.604Z',
-    new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
-    new Date().toISOString(),
+  movements: [
+    { value: 200, date: '2019-11-18T21:31:17.178Z' },
+    { value: 450, date: '2019-12-23T07:42:02.383Z' },
+    { value: -400, date: '2020-01-28T09:15:04.904Z' },
+    { value: 3000.35, date: '2020-04-01T10:17:24.185Z' },
+    { value: -650.8, date: '2021-05-08T14:11:59.604Z' },
+    {
+      value: -130,
+      date: new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      value: 70.73,
+      date: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
+    },
+    { value: 1300, date: new Date().toISOString() },
   ],
+  interestRate: 1.2, // %
   currency: 'EUR',
   locale: 'pt-PT',
 };
 
 const account2 = {
   owner: 'Jessica Davis',
-  movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
-  interestRate: 1.5,
   pin: '2222',
-  movementsDates: [
-    '2019-11-01T13:15:33.035Z',
-    '2019-11-30T09:48:16.867Z',
-    '2019-12-25T06:04:23.907Z',
-    '2020-01-25T14:18:46.235Z',
-    '2020-02-05T16:33:06.386Z',
-    new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
-    new Date().toISOString(),
+  movements: [
+    { value: 5000, date: '2019-11-01T13:15:33.035Z' },
+    { value: 3400, date: '2019-11-30T09:48:16.867Z' },
+    { value: -150, date: '2019-12-25T06:04:23.907Z' },
+    { value: -790.12, date: '2020-01-25T14:18:46.235Z' },
+    { value: -3210.98, date: '2020-02-05T16:33:06.386Z' },
+    {
+      value: -1000,
+      date: new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      value: 8500,
+      date: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
+    },
+    { value: -30.32, date: new Date().toISOString() },
   ],
+  interestRate: 1.5,
   currency: 'USD',
   locale: 'en-US',
 };
 
 const account3 = {
   owner: 'Steven Thomas Williams',
-  movements: [200, -200.35, 340, -300.12, -20, 50.9, 400, -460],
-  interestRate: 0.7,
   pin: '3333',
-  movementsDates: [
-    '2019-11-01T13:15:33.035Z',
-    '2019-11-30T09:48:16.867Z',
-    '2019-12-25T06:04:23.907Z',
-    '2020-01-25T14:18:46.235Z',
-    '2020-02-05T16:33:06.386Z',
-    new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
-    new Date().toISOString(),
+  movements: [
+    { value: 200, date: '2019-11-01T13:15:33.035Z' },
+    { value: -200.35, date: '2019-11-30T09:48:16.867Z' },
+    {
+      value: 340,
+      date: new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      value: -300.12,
+      date: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
+    },
+    { value: -20, date: new Date().toISOString() },
   ],
+  interestRate: 0.7,
   currency: 'GBP',
 };
 
 const account4 = {
   owner: 'Sarah Smith',
-  movements: [430, 1000.34, 700, 50.1, 90],
-  interestRate: 1,
   pin: '4444',
-  movementsDates: [
-    '2019-11-01T13:15:33.035Z',
-    '2020-11-30T09:48:16.867Z',
-    new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
-    new Date().toISOString(),
+  movements: [
+    { value: 430, date: '2019-11-01T13:15:33.035Z' },
+    { value: 1000.34, date: '2020-11-30T09:48:16.867Z' },
+    {
+      value: 700,
+      date: new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      value: 50.1,
+      date: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
+    },
+    { value: 90, date: new Date().toISOString() },
   ],
+  interestRate: 1,
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -111,7 +128,6 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 let currentAccount;
 let sorted = false;
-
 let curDate = new Date();
 
 const curDateOptions = {
@@ -131,6 +147,8 @@ const movDateOptions = {
   year: 'numeric',
 };
 
+//Functions
+
 // creating usernames
 accounts.forEach(function (acc) {
   acc.username = acc.owner
@@ -138,7 +156,6 @@ accounts.forEach(function (acc) {
     .reduce((username, word) => username + word[0].toLowerCase(), '');
 });
 
-//Functions
 function dateFormatting(date, acc, options) {
   let loc = acc.locale || Navigator.language;
   return new Intl.DateTimeFormat(loc, options).format(date);
@@ -166,18 +183,18 @@ function displayMovements(acc) {
   containerMovements.innerHTML = '';
 
   let sortedAccMovements = acc.movements.slice().sort(function (a, b) {
-    return a - b;
+    return a.value - b.value;
   });
 
   let movements = sorted ? sortedAccMovements : acc.movements;
 
   movements.forEach(function (mov, i) {
-    let type = mov > 0 ? 'deposit' : 'withdrawal';
+    let type = mov.value > 0 ? 'deposit' : 'withdrawal';
 
     let movDate;
 
     let timePassed = Math.floor(
-      (new Date() - new Date(acc.movementsDates[i])) / (1000 * 60 * 60 * 24)
+      (new Date() - new Date(mov.date)) / (1000 * 60 * 60 * 24)
     );
 
     if (timePassed === 0) {
@@ -189,14 +206,11 @@ function displayMovements(acc) {
     } else if (timePassed === 7) {
       movDate = 'A week ago';
     } else {
-      movDate = dateFormatting(
-        new Date(acc.movementsDates[i]),
-        acc,
-        movDateOptions
-      );
+      movDate = dateFormatting(new Date(mov.date), acc, movDateOptions);
     }
 
-    const formattedMov = currencyFormatting(mov, acc);
+    const formattedMov = currencyFormatting(mov.value, acc);
+
     let str = `
     <div class="movements__row">
       <div class="movements__type movements__type--${type}">${
@@ -212,32 +226,35 @@ function displayMovements(acc) {
 }
 
 function displayBalance(acc) {
-  let accBalance = acc.movements.reduce((balance, mov) => balance + mov, 0);
+  let accBalance = acc.movements.reduce(
+    (balance, mov) => balance + mov.value,
+    0
+  );
   labelBalance.textContent = currencyFormatting(accBalance, acc);
 }
 
 function displaySummary(acc) {
   //In
   let sumIn = acc.movements
-    .filter(mov => mov > 0)
-    .reduce((sum, deposit) => sum + deposit, 0);
+    .filter(mov => mov.value > 0)
+    .reduce((sum, deposit) => sum + deposit.value, 0);
 
   labelSumIn.textContent = currencyFormatting(sumIn, acc);
 
   //Out
   let sumOut = acc.movements
-    .filter(mov => mov < 0)
-    .reduce((sum, withdrawal) => sum + Math.abs(withdrawal), 0);
+    .filter(mov => mov.value < 0)
+    .reduce((sum, withdrawal) => sum + Math.abs(withdrawal.value), 0);
 
   labelSumOut.textContent = currencyFormatting(sumOut, acc);
 
   //Interest (it is only added if it is more than or equal to 1)
   let sumInterest = acc.movements
-    .filter(mov => mov > 0)
+    .filter(mov => mov.value > 0)
     .reduce(function (sum, deposit) {
       let interestAdded =
-        (deposit * acc.interestRate) / 100 >= 1
-          ? (deposit * acc.interestRate) / 100
+        (deposit.value * acc.interestRate) / 100 >= 1
+          ? (deposit.value * acc.interestRate) / 100
           : 0;
       return sum + interestAdded;
     }, 0);
@@ -284,14 +301,17 @@ btnTransfer.addEventListener('click', function (e) {
   if (
     receivingAcc &&
     transferredAmt > 0 &&
-    currentAccount.movements.reduce((balance, mov) => balance + mov, 0) >
+    currentAccount.movements.reduce((balance, mov) => balance + mov.value, 0) >
       transferredAmt
   ) {
-    receivingAcc.movements.push(transferredAmt);
-    currentAccount.movements.push(-transferredAmt);
-
-    receivingAcc.movementsDates.push(new Date().toISOString());
-    currentAccount.movementsDates.push(new Date().toISOString());
+    receivingAcc.movements.push({
+      value: transferredAmt,
+      date: new Date().toISOString(),
+    });
+    currentAccount.movements.push({
+      value: -transferredAmt,
+      date: new Date().toISOString(),
+    });
 
     updateUI(currentAccount);
   }
@@ -304,10 +324,13 @@ btnLoan.addEventListener('click', function (e) {
   inputLoanAmount.value = '';
   if (
     loanAmt > 0 &&
-    currentAccount.movements.some(mov => mov >= 0.1 * loanAmt)
+    currentAccount.movements.some(mov => mov.value >= 0.1 * loanAmt)
   ) {
-    currentAccount.movements.push(Math.round(loanAmt));
-    currentAccount.movementsDates.push(new Date().toISOString());
+    currentAccount.movements.push({
+      value: Math.round(loanAmt),
+      date: new Date().toISOString(),
+    });
+
     updateUI(currentAccount);
   }
 });
