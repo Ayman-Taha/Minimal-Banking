@@ -342,4 +342,24 @@ btnSort.addEventListener('click', function (e) {
   updateUI(currentAccount);
 });
 
+//closing accounts
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  let username = inputCloseUsername.value;
+  let password = inputClosePin.value;
+  if (
+    username === currentAccount.username &&
+    password === currentAccount?.pin
+  ) {
+    containerApp.style.opacity = 0;
+    labelWelcome.textContent = 'Log in to get started';
+    accounts.splice(
+      accounts.findIndex(acc => acc.username === currentAccount.username),
+      1
+    );
+  }
+  inputCloseUsername.value = '';
+  inputClosePin.value = '';
+});
+
 /////////////////////////////////////////////////
