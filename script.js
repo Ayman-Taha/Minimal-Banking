@@ -126,7 +126,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 //Globals
 
-let currentAccount;
+let currentAccount, timer;
 let sorted = false;
 let curDate = new Date();
 
@@ -263,6 +263,10 @@ function displaySummary(acc) {
 
 //update UI
 function updateUI(acc) {
+  if (timer) {
+    clearInterval(timer);
+  }
+  timer = startLogOutTimer();
   displayCurrentDate(acc);
   displayWelcome(acc);
   displayMovements(acc);
@@ -351,8 +355,8 @@ btnClose.addEventListener('click', function (e) {
     username === currentAccount.username &&
     password === currentAccount?.pin
   ) {
-    containerApp.style.opacity = 0;
     labelWelcome.textContent = 'Log in to get started';
+    containerApp.style.opacity = 0;
     accounts.splice(
       accounts.findIndex(acc => acc.username === currentAccount.username),
       1
@@ -362,4 +366,28 @@ btnClose.addEventListener('click', function (e) {
   inputClosePin.value = '';
 });
 
+// logout inactivity timer
+const startLogOutTimer = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+
+    labelTimer.textContent = `${min}:${sec}`;
+
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = 'Log in to get started';
+      containerApp.style.opacity = 0;
+    }
+
+    time--;
+  };
+
+  let time = 60 * 5;
+
+  tick();
+  const timer = setInterval(tick, 1000);
+
+  return timer;
+};
 /////////////////////////////////////////////////
