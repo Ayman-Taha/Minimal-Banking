@@ -330,12 +330,14 @@ btnLoan.addEventListener('click', function (e) {
     loanAmt > 0 &&
     currentAccount.movements.some(mov => mov.value >= 0.1 * loanAmt)
   ) {
-    currentAccount.movements.push({
-      value: Math.round(loanAmt),
-      date: new Date().toISOString(),
-    });
+    setTimeout(function () {
+      currentAccount.movements.push({
+        value: Math.round(loanAmt),
+        date: new Date().toISOString(),
+      });
 
-    updateUI(currentAccount);
+      updateUI(currentAccount);
+    }, 3000);
   }
 });
 
