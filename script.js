@@ -5,6 +5,13 @@
 // BANKIST APP
 
 // Data
+
+//dynamic dates for data
+const today = new Date().toISOString();
+const yesterday = new Date(new Date() - 24 * 60 * 60 * 1000).toISOString();
+const weekAgo = new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+//accounts data
 const account1 = {
   owner: 'Jonas Schmedtmann',
   pin: '1111',
@@ -14,15 +21,9 @@ const account1 = {
     { value: -400, date: '2020-01-28T09:15:04.904Z' },
     { value: 3000.35, date: '2020-04-01T10:17:24.185Z' },
     { value: -650.8, date: '2021-05-08T14:11:59.604Z' },
-    {
-      value: -130,
-      date: new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      value: 70.73,
-      date: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
-    },
-    { value: 1300, date: new Date().toISOString() },
+    { value: -130, date: weekAgo },
+    { value: 70.73, date: yesterday },
+    { value: 1300, date: today },
   ],
   interestRate: 1.2, // %
   currency: 'EUR',
@@ -38,15 +39,9 @@ const account2 = {
     { value: -150, date: '2019-12-25T06:04:23.907Z' },
     { value: -790.12, date: '2020-01-25T14:18:46.235Z' },
     { value: -3210.98, date: '2020-02-05T16:33:06.386Z' },
-    {
-      value: -1000,
-      date: new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      value: 8500,
-      date: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
-    },
-    { value: -30.32, date: new Date().toISOString() },
+    { value: -1000, date: weekAgo },
+    { value: 8500, date: yesterday },
+    { value: -30.32, date: today },
   ],
   interestRate: 1.5,
   currency: 'USD',
@@ -59,15 +54,9 @@ const account3 = {
   movements: [
     { value: 200, date: '2019-11-01T13:15:33.035Z' },
     { value: -200.35, date: '2019-11-30T09:48:16.867Z' },
-    {
-      value: 340,
-      date: new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      value: -300.12,
-      date: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
-    },
-    { value: -20, date: new Date().toISOString() },
+    { value: 340, date: weekAgo },
+    { value: -300.12, date: yesterday },
+    { value: -20, date: today },
   ],
   interestRate: 0.7,
   currency: 'GBP',
@@ -79,15 +68,9 @@ const account4 = {
   movements: [
     { value: 430, date: '2019-11-01T13:15:33.035Z' },
     { value: 1000.34, date: '2020-11-30T09:48:16.867Z' },
-    {
-      value: 700,
-      date: new Date(new Date() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      value: 50.1,
-      date: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(),
-    },
-    { value: 90, date: new Date().toISOString() },
+    { value: 700, date: weekAgo },
+    { value: 50.1, date: yesterday },
+    { value: 90, date: today },
   ],
   interestRate: 1,
 };
